@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <header class="hud">
+        <h1>Snake</h1>
+        <div class="hud-stats">
+          <p>Score: <span id="score">0</span></p>
+          <p>Best: <span id="best">0</span></p>
+        </div>
+      </header>
+
+      <section class="board-wrap">
+        <canvas id="board" width="600" height="600" aria-label="Snake game board"></canvas>
+        <div id="overlay" class="overlay">
+          <p id="overlay-text">Press Start</p>
+          <button id="start-btn" type="button">Start</button>
+        </div>
+      </section>
+
+      <section class="controls">
+        <button id="pause-btn" type="button">Pause</button>
+        <button id="restart-btn" type="button">Restart</button>
+      </section>
+
+      <section class="help">
+        <p>Desktop: Arrow keys or WASD</p>
+        <p>Mobile: Swipe on the board</p>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
