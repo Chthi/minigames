@@ -8,8 +8,8 @@ const startBtn = document.getElementById("start-btn");
 const pauseBtn = document.getElementById("pause-btn");
 const restartBtn = document.getElementById("restart-btn");
 const musicTracks = [
-  new Audio("assets/audio/Serpent Dans Le Navigateur 1.mp3"),
-  new Audio("assets/audio/Serpent Dans Le Navigateur 2.mp3"),
+  new Audio("assets/audio/serpent-dans-le-navigateur-1.mp3"),
+  new Audio("assets/audio/serpent-dans-le-navigateur-2.mp3"),
 ];
 
 const gridCount = 20;
