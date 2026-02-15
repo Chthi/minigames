@@ -7,6 +7,10 @@ const overlayText = document.getElementById("overlay-text");
 const startBtn = document.getElementById("start-btn");
 const pauseBtn = document.getElementById("pause-btn");
 const restartBtn = document.getElementById("restart-btn");
+const musicTracks = [
+  new Audio("assets/audio/Serpent Dans Le Navigateur 1.mp3"),
+  new Audio("assets/audio/Serpent Dans Le Navigateur 2.mp3"),
+];
 
 const gridCount = 20;
 const tileSize = canvas.width / gridCount;
@@ -21,8 +25,48 @@ let best = Number(localStorage.getItem("snake-best") || 0);
 let timer;
 let running = false;
 let paused = false;
+let activeTrack = null;
+let nextTrackIndex = 0;
+let audioUnlocked = false;
+
+musicTracks.forEach((track) => {
+  track.preload = "auto";
+  track.loop = true;
+  track.volume = 0.35;
+});
 
 bestEl.textContent = String(best);
+
+function stopMusic(resetTime = false) {
+  if (!activeTrack) {
+    return;
+  }
+
+  activeTrack.pause();
+  if (resetTime) {
+    activeTrack.currentTime = 0;
+  }
+}
+
+function playMusicForRun() {
+  if (!audioUnlocked) {
+    return;
+  }
+
+  const nextTrack = musicTracks[nextTrackIndex];
+  nextTrackIndex = (nextTrackIndex + 1) % musicTracks.length;
+
+  if (activeTrack && activeTrack !== nextTrack) {
+    activeTrack.pause();
+    activeTrack.currentTime = 0;
+  }
+
+  activeTrack = nextTrack;
+  activeTrack.currentTime = 0;
+  activeTrack.play().catch(() => {
+    // Ignore autoplay failures until the user interacts again.
+  });
+}
 
 function randomCell() {
   return {
@@ -108,6 +152,7 @@ function draw() {
 function endGame() {
   clearInterval(timer);
   running = false;
+  stopMusic(true);
   if (score > best) {
     best = score;
     localStorage.setItem("snake-best", String(best));
@@ -169,7 +214,10 @@ function setDirection(x, y) {
 function startGame() {
   resetGame();
   running = true;
+  audioUnlocked = true;
   hideOverlay();
+  stopMusic(true);
+  playMusicForRun();
   clearInterval(timer);
   timer = setInterval(tick, speedMs);
 }
@@ -181,8 +229,14 @@ function togglePause() {
   paused = !paused;
   pauseBtn.textContent = paused ? "Resume" : "Pause";
   if (paused) {
+    stopMusic(false);
     showOverlay("Paused", "Resume");
   } else {
+    if (activeTrack) {
+      activeTrack.play().catch(() => {
+        // Ignore autoplay failures until the user interacts again.
+      });
+    }
     hideOverlay();
   }
 }
